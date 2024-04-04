@@ -1,0 +1,25 @@
+{
+  "name": "canvas",
+  "version": "1.0.0",
+  "description": "Shortest Path Playground",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
+  }
+}
