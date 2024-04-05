@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { PriorityQueue } from '../data_structures';
+import { PriorityQueue } from '../models/PriorityQueue';
 
 describe('Priority Queue', () => {
     test('Adds items and remove them by priority', () => {

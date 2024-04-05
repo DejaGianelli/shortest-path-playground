@@ -1,56 +1,20 @@
-import { 
-    handleMouseMove, 
-    handleMouseDown, 
-    handleMouseUp, 
-    handleCityModeClicked, 
-    handlePathModeClicked, 
-    handleDrawCity,
-    handleCollision
-} from "./event_handlers.js"
-
-function DrawCityMode() {
-    this.enable = function() {
-        App.canvas.addEventListener("click", handleDrawCity)
-    }
-
-    this.disable = function() {
-        App.canvas.removeEventListener("click", handleDrawCity)
-    }
-}
-
-function DrawPathMode() {
-    this.collision = false;
-
-    const hc = handleCollision.bind(this)
-    const hmm = handleMouseMove.bind(this)
-    const hmd = handleMouseDown.bind(this)
-    const hmu = handleMouseUp.bind(this)
-
-    this.enable = function() {
-        App.canvas.addEventListener("mousemove", hmm)
-        App.canvas.addEventListener("mousedown", hmd)
-        window.addEventListener("mouseup", hmu)
-        App.canvas.addEventListener("mousemove", hc)
-    }
-
-    this.disable = function() {
-        App.canvas.removeEventListener("mousemove", hmm)
-        App.canvas.removeEventListener("mousedown", hmd)
-        window.removeEventListener("mouseup", hmu)
-        App.canvas.removeEventListener("mousemove", hc)
-    }
-}
+import { HandleCityModeClicked, HandlePathModeClicked } from "./event_handlers/draw_mode_menu.js"
+import { DrawPathMode } from "./models/DrawPathMode.js"
+import { DrawCityMode } from "./models/DrawCityMode.js"
 
 function Application() {
+    
     this.drawMode = new DrawPathMode()
     this.canvas
     this.context
     this.isDrawing = false
+
     /**
      * Object that is drawing on the Canvas at the moment
      * @type {PathDrawer}
      */
     this.drawer
+
     /**
      * Array of Paths
      * @type {Path[]}
@@ -66,16 +30,14 @@ function Application() {
     this.start = function() {
         this.initCanvas()
         this.initModes()
-
-        const self = this
     }
 
     this.initModes = function() {
         const pathModeBtn = document.getElementById("path-mode-btn")
-        pathModeBtn.addEventListener("click", handlePathModeClicked)
+        pathModeBtn.addEventListener("click", HandlePathModeClicked)
 
         const cityModeBtn = document.getElementById("city-mode-btn")
-        cityModeBtn.addEventListener("click", handleCityModeClicked)
+        cityModeBtn.addEventListener("click", HandleCityModeClicked)
 
         this.drawMode.enable();
     }

@@ -1,4 +1,5 @@
-import { Segment, Point } from "./models.js"
+import { Segment } from "../models/Path.js"
+import { Point } from "../models/Point.js"
 
 function PathDrawer(x = 0, y = 0) {
     this.pathId = Math.floor(Math.random() * 100)

@@ -25,21 +25,10 @@ function Path(segments = []) {
 }
 
 /**
- * Represents a Point in Graph.
+ * Represents a segment of a Path. A Path is composed by multiple Segments (tiny lines)
  * @constructor
- * @param {int} x - Coord on the x axis
- * @param {int} y - Coord on the y axis
- */
-function Point(x, y) {
-    this.x = x
-    this.y = y
-}
-
-/**
- * Represents a Point in Graph.
- * @constructor
- * @param {Point} p1 - Point one in the cartesion plan
- * @param {Point} p2 - Point two in the cartesion plan
+ * @param {Point} p1 - Point one in the cartesian plan
+ * @param {Point} p2 - Point two in the cartesian plan
  */
 function Segment(p1, p2) {
     this.p1 = p1
@@ -52,19 +41,4 @@ function Segment(p1, p2) {
     }
 }
 
-/**
- * Represents a City in the Map. A City is always represented by a circle
- * @constructor
- * @param {Point} center - A Point representing the center of the city
- * @param {int} size - The size of the city in the plan. For a circle, it is the diameter
- */
-function City(center, size) {
-    this.center = center
-    this.size = size
-
-    this.radius = function() {
-        return this.size / 2
-    }
-}
-
-export { Segment, Path, Point, City }
+export { Path, Segment }
