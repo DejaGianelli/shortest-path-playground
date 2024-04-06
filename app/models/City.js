@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
 /**
  * Represents a City in the Map. A City is always represented by a circle
  * @constructor
@@ -13,5 +15,5 @@ export default function City(center, size) {
         return this.size / 2
     }
 
-    this.id = Math.floor(Math.random() * 100)
+    this.id = uuidv4()
 }

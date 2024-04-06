@@ -29,7 +29,7 @@ export default function createApplication(canvas, window) {
             return
         }
         state.cities[city.id] = city
-        console.log("City Draw")
+        console.log(`City Draw. Id: ${city.id}`)
     }
 
     function cityCollide(city) {
@@ -97,7 +97,7 @@ export default function createApplication(canvas, window) {
         state.paths[path.id] = path
         const drawing = createPathDraw(path.id, command.x, command.y)
         state.currentDrawing = drawing
-        console.log("Drawing started")
+        console.log(`Path Drawing started. Id: ${path.id}`)
     }
 
     function stopDrawingPath(command) {

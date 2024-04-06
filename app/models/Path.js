@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
 /**
  * Represents a Path that connects two Cities.
  * @constructor
@@ -25,7 +27,7 @@ function Path(segments = []) {
         return this.id
     }
 
-    this.id = Math.floor(Math.random() * 100)
+    this.id = uuidv4()
 }
 
 /**
