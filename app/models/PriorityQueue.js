@@ -3,7 +3,7 @@
  * @constructor
  * @param {Comparator} cmp - Object that implements Comparator interface
  */
-function PriorityQueue(cmp) {
+export default function PriorityQueue(cmp) {
     /**
      * Array of Object
      * @type {Object[]}
@@ -44,5 +44,3 @@ function PriorityQueue(cmp) {
         return items[--count]
     }
 }
-
-export { PriorityQueue }

@@ -21,6 +21,10 @@ function Path(segments = []) {
         }, 0)
     }
 
+    this.getId = function() {
+        return this.id
+    }
+
     this.id = Math.floor(Math.random() * 100)
 }
 
