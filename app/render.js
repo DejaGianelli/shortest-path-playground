@@ -1,7 +1,11 @@
-export default function renderCanvas({ canvas, cities, paths }) {
+export default function renderCanvas({ canvas, cities, paths, size }) {
     const context = canvas.getContext("2d")
+
+    canvas.width = size.width
+    canvas.height = size.height
+
     context.fillStyle = 'white'
-    context.clearRect(0, 0, 800, 400)
+    context.clearRect(0, 0, size.width, size.height)
 
     for (const [, city] of Object.entries(cities)) {
         context.beginPath();
@@ -22,6 +26,6 @@ export default function renderCanvas({ canvas, cities, paths }) {
     }
     
     requestAnimationFrame(() => {
-        renderCanvas({ canvas, cities, paths })
+        renderCanvas({ canvas, cities, paths, size })
     })
 }

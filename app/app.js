@@ -6,6 +6,10 @@ import createPathDraw from "./path-draw.js"
 
 export default function createApplication(canvas, window) {
     const state = {
+        size: {
+            width: 0,
+            height: 0
+        },
         canvas: canvas,
         drawMode:  { 
             type: "city",
@@ -120,6 +124,16 @@ export default function createApplication(canvas, window) {
         }
     }
 
+    function setCanvasSize() {
+        const container = document.getElementById("convas-container")
+        state.size.width = container.clientWidth
+        state.size.height = container.clientHeight
+    }
+
+    window.addEventListener("resize", function(e) {
+        setCanvasSize()
+    });
+    
     const drawPathModeListener = createDrawPathModeListener(state, window)
     drawPathModeListener.subscribe("drawingStarted", startDrawingPath)
     drawPathModeListener.subscribe("drawingEnded", stopDrawingPath)
@@ -131,6 +145,7 @@ export default function createApplication(canvas, window) {
     drawCityModeListener.subscribe("change", changeDrawMode)
 
     drawCityModeListener.set()
+    setCanvasSize()
 
     return {
         state

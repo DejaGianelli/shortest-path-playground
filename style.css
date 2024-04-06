@@ -1,0 +1,64 @@
+:root {
+    --first-color: #5585b5;
+    --second-color: #53a8b6;
+    --third-color: #79c2d0;
+    --fourth-color: #bbe4e9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+}
+
+html, body{
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
+
+body{
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+#canvas {
+    background-color: lightgray;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+#app {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--fourth-color);
+}
+
+#convas-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.menu__btn {
+    border-bottom: 1px solid white;
+    padding: 1rem;
+    background-color: var(--fourth-color);
+    font-size: 1rem;
+}
+
+.menu__btn:hover {
+    cursor: pointer;
+    background-color: var(--first-color); 
+}
