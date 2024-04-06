@@ -27,9 +27,13 @@ export default function createPathDraw(pathId, initialX, initialY) {
         state.delaying = !state.delaying
     }, 50);
 
+    function dequeue() {
+        return state.segments.shift()
+    }
+
     return {
         id: state.id,
-        segments: state.segments,
+        dequeue: dequeue,
         draw
     }
 }

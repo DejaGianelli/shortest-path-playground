@@ -111,10 +111,13 @@ export default function createApplication(canvas, window) {
         if (!state.isDrawing) {
             return
         }
-        const { id, segments } = state.currentDrawing
+        const { id, dequeue } = state.currentDrawing
         state.currentDrawing.draw(command)
-        state.paths[id].segments = segments
-        console.log("Segment Draw")
+        const segment = dequeue()
+        if (segment) {
+            state.paths[id].segments.push(segment)
+            console.log("Segment Draw")
+        }
     }
 
     const drawPathModeListener = createDrawPathModeListener(state, window)
