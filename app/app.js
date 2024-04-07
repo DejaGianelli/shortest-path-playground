@@ -26,13 +26,12 @@ export default function createApplication(canvas, window) {
 
     function drawCity(command) {
         console.log("Drawing City in Canvas")
-        const city = new City(new Point(command.x, command.y), command.size)
+        const city = City(Point(command.x, command.y), command.size)
         if (cityCollide(city)) {
             console.log("Can't draw because of a city collision")
             return
         }
         state.cities[city.id] = city
-        //state.graph.addNode(city.id)
         console.log(`City Draw. Id: ${city.id}`)
     }
 
@@ -66,8 +65,8 @@ export default function createApplication(canvas, window) {
     function hasCollision(point) {
         //TODO: improve performance of this method, since it iterates over all cities and point in the border of the circle
         // this algorithm is O(n^2)
-        let collide = false
-        Object.entries(state.cities).forEach(([, city]) => {
+        let collision = undefined
+        for (const [, city] of Object.entries(state.cities)) {
             for (let y = 0, rad = 0.0174533; y < 360, rad < 6.28319; y++, rad += 0.0174533) {
                 const catX = city.radius() * Math.cos(rad)
                 const catY = city.radius() * Math.sin(rad)
@@ -78,12 +77,13 @@ export default function createApplication(canvas, window) {
                     point.x <= offsetX && point.x >= (offsetX - (catX * 2)) &&
                     point.y <= offsetY && point.y >= (offsetY - (catY * 2))
                 ) {
-                    console.log(`Point x: ${point.x} y: ${point.y} collided`)
-                    collide = true
+                    console.log(`Point x: ${point.x} y: ${point.y} collided with city ${city.id}`)
+                    collision = { city: city }
+                    break;
                 }
             }
-        })
-        return collide
+        }
+        return collision
     }
 
     /**
@@ -91,13 +91,14 @@ export default function createApplication(canvas, window) {
      * @param {Point} command
      */
     function startDrawingPath(command) {
-        const point = new Point(command.x, command.y)
-        if (hasCollision(point)) {
-            console.log("Can't draw, there is a city here")
+        const point = Point(command.x, command.y)
+        const collision = hasCollision(point)
+        if (!collision) {
+            console.log("A Path must connect two cities")
             return
         }
         state.isDrawing = true
-        const path = new Path()
+        const path = Path()
         state.paths[path.id] = path
         const drawing = createPathDraw(path.id, command.x, command.y)
         state.currentDrawing = drawing
@@ -105,10 +106,14 @@ export default function createApplication(canvas, window) {
     }
 
     function stopDrawingPath(command) {
-        if (hasCollision(new Point(command.mouseX, command.mouseY))) {
-            const { id, } = state.currentDrawing
+        if (!state.isDrawing) {
+            return
+        }
+        const collision = hasCollision(Point(command.mouseX, command.mouseY))
+        if (!collision) {
+            const { id } = state.currentDrawing
             delete state.paths[id]
-            console.log("Cannot make a path inside city")
+            console.log("A Path must connect two cities")
         }
         state.isDrawing = false
         state.currentDrawing = undefined

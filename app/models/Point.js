@@ -5,6 +5,11 @@
  * @param {int} y - Coord on the y axis
  */
 export default function Point(x, y) {
-    this.x = x
-    this.y = y
+    const _x = x
+    const _y = y
+    
+    return {
+        x: _x,
+        y: _y
+    }
 }

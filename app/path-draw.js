@@ -15,7 +15,7 @@ export default function createPathDraw(pathId, initialX, initialY) {
         if (!state.delaying) {
             const mouseX = command.mouseX
             const mouseY = command.mouseY
-            const segment = new Segment(new Point(state.x, state.y), new Point(mouseX, mouseY))
+            const segment = Segment(Point(state.x, state.y), Point(mouseX, mouseY))
             state.segments.push(segment)
             state.x = mouseX
             state.y = mouseY
