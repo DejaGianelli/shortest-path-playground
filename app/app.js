@@ -20,32 +20,7 @@ export default function createApplication(canvas, window) {
         paths: {},
         currentDrawing: undefined,
         isDrawing: false,
-
         graph: Graph()
-    }
-
-    function drawCity(command) {
-        console.log("Drawing City in Canvas")
-        const city = City(Point(command.x, command.y), command.size)
-        if (cityCollide(city)) {
-            console.log("Can't draw because of a city collision")
-            return
-        }
-        state.cities[city.id] = city
-        console.log(`City Draw. Id: ${city.id}`)
-    }
-
-    function cityCollide(city) {
-        let collide = false
-        Object.entries(state.cities).forEach(([, current]) => {
-            const deltaX = Math.abs(current.center.x - city.center.x)
-            const deltaY = Math.abs(current.center.y - city.center.y)
-            const distance = city.radius() + current.radius()
-            if (deltaX < distance && deltaY < distance) {
-                collide = true
-            }
-        })
-        return collide
     }
 
     function changeDrawMode(command) {
@@ -86,6 +61,30 @@ export default function createApplication(canvas, window) {
         return collision
     }
 
+    function drawCity(command) {
+        console.log("Drawing City in Canvas")
+        const city = City(Point(command.x, command.y), command.size)
+        if (cityCollide(city)) {
+            console.log("Can't draw because of a city collision")
+            return
+        }
+        state.cities[city.id] = city
+        state.graph.addNode(city.id)
+        console.log(`City Draw. Id: ${city.id}`)
+    }
+
+    function cityCollide(city) {
+        for (const [, current] of Object.entries(state.cities)) {
+            const deltaX = Math.abs(current.center.x - city.center.x)
+            const deltaY = Math.abs(current.center.y - city.center.y)
+            const distance = city.radius() + current.radius()
+            if (deltaX < distance && deltaY < distance) {
+                return true
+            }
+        }
+        return false
+    }
+
     /**
      * Sets the application to drawing mode, indicating that something is being draw
      * @param {Point} command
@@ -96,9 +95,10 @@ export default function createApplication(canvas, window) {
         if (!collision) {
             console.log("A Path must connect two cities")
             return
-        }
+        } 
         state.isDrawing = true
         const path = Path()
+        path.from = collision.city
         state.paths[path.id] = path
         const drawing = createPathDraw(path.id, command.x, command.y)
         state.currentDrawing = drawing
@@ -114,6 +114,10 @@ export default function createApplication(canvas, window) {
             const { id } = state.currentDrawing
             delete state.paths[id]
             console.log("A Path must connect two cities")
+        } else {
+            const { id } = state.currentDrawing
+            state.paths[id].to = collision.city
+            state.graph.addEdge(state.paths[id].from.id, state.paths[id].to.id, state.paths[id].distance())
         }
         state.isDrawing = false
         state.currentDrawing = undefined

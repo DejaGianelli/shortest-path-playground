@@ -17,6 +17,10 @@ function Path() {
      */
     const segments = []
 
+    let cityFrom = undefined
+
+    let cityTo = undefined
+
     function distance() {
         return segments.reduce((acc, current) => {
             return acc + current.distance()
@@ -26,7 +30,9 @@ function Path() {
     return {
         id,
         distance,
-        segments
+        segments,
+        from: cityFrom,
+        to: cityTo
     }
 }
 

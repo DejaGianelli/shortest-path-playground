@@ -1,14 +1,18 @@
 import { Segment } from "./models/Path.js"
 import Point from "./models/Point.js"
 
-export default function createPathDraw(pathId, initialX, initialY) {
+export default function createPathDraw(id, initialX, initialY) {
     const state = {
-        id: pathId,
+        id: id,
         x: initialX,
         y: initialY,
         segments: [],
         observers: {},
         delaying: false
+    }
+
+    function complete(cityTo) {
+        state.cityTo = cityTo
     }
 
     function draw(command) {
@@ -34,6 +38,7 @@ export default function createPathDraw(pathId, initialX, initialY) {
     return {
         id: state.id,
         dequeue: dequeue,
-        draw
+        draw,
+        complete
     }
 }

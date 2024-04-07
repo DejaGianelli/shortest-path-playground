@@ -101,7 +101,6 @@ function Graph() {
         addNode,
         addEdge,
         getShortestPath,
-
         nodes
     }
 }
