@@ -37,7 +37,7 @@ function Graph() {
     }
 
     /**
-     * Get an array representation of the shortest path
+     * Get an array representation of the shortest path using Dikjstra's Algorithm
      * @param {string} from 
      * @param {string} to 
      * @returns {array}

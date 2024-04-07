@@ -1,22 +1,50 @@
 <!doctype html>
 <html lang="en-US">
-  <head>
+
+<head>
     <meta charset="utf-8" />
-    <title>Shortest Path</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./style.css"/>
-  </head>
-  <body>
+    <title>Find Shortest Path</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
     <div id="app">
         <div id="menu">
-            <button class="menu__btn" id="city-mode-btn"><i class="fa-solid fa-city"></i></button>
-            <button class="menu__btn" id="path-mode-btn"><i class="fa-solid fa-road"></i></button>
+            <button class="menu__btn" id="city-mode-btn">
+                <i class="fa-solid fa-city" title="Draw City Mode"></i>
+            </button>
+            <button class="menu__btn" id="path-mode-btn">
+                <i class="fa-solid fa-road" title="Draw Path Mode"></i>
+            </button>
+            <button class="menu__btn" id="shortest-path-btn">
+                <i class="fa-solid fa-arrows-left-right-to-line" title="Find Shortest Path"></i>
+            </button>
         </div>
         <div id="convas-container">
             <canvas id="canvas"></canvas>
         </div>
     </div>
-    </script>
+
+    <dialog class="modal">
+        <div class="modal__container">
+            <label class="modal__bg"></label>
+            <div class="modal__inner">
+                <label class="modal__close"></label>
+                <h2 class="modal__title">Find Shortest Path</h2>
+
+            </div>
+        </div>
+    </dialog>
+
     <script type="module" src="./boostrap.js"></script>
-  </body>
+</body>
+
 </html>
