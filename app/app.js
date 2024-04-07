@@ -1,7 +1,7 @@
 import City from "./models/City.js"
 import { Path } from "./models/Path.js"
 import Point from "./models/Point.js"
-import createPathDraw from "./path-draw.js"
+import createPathDrawing from "./path-drawing.js"
 import { Graph } from "./models/Graph.js"
 
 export default function createApplication() {
@@ -84,7 +84,7 @@ export default function createApplication() {
         const path = Path()
         path.from = collision.city
         paths[path.id] = path
-        const drawing = createPathDraw(path.id, command.x, command.y)
+        const drawing = createPathDrawing(path.id, command.x, command.y)
         currentDrawing = drawing
         console.log(`Path Drawing started. Id: ${path.id}`)
     }

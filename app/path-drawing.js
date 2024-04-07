@@ -1,7 +1,7 @@
 import { Segment } from "./models/Path.js"
 import Point from "./models/Point.js"
 
-export default function createPathDraw(id, initialX, initialY) {
+export default function createPathDrawing(id, initialX, initialY) {
     const state = {
         id: id,
         x: initialX,
