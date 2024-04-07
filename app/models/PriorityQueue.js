@@ -20,7 +20,7 @@ export default function PriorityQueue(cmp) {
      * Adds an item in the queue
      * @param {Object} item - Some item
      */
-    this.add = function(item) {
+    function add(item) {
         let i = 0
         for (i = (count - 1); i >= 0; i--) {
             if (comparator(items[i], item) > 0) {
@@ -38,9 +38,19 @@ export default function PriorityQueue(cmp) {
      * Removes a item from the queue by priority
      * @returns {Object} item - Removed item
      */
-    this.remove = function() {
+    function remove() {
         if (count == 0)
             throw Error("Queue is empty!")
         return items[--count]
+    }
+
+    function isEmpty() {
+        return count === 0
+    }
+
+    return {
+        remove,
+        add,
+        isEmpty
     }
 }

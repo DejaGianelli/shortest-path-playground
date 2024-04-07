@@ -3,6 +3,7 @@ import { Path } from "./models/Path.js"
 import Point from "./models/Point.js"
 import { createDrawPathModeListener, createDrawCityModeListener } from "./listeners/draw-mode-listener.js"
 import createPathDraw from "./path-draw.js"
+import { Graph } from "./models/Graph.js"
 
 export default function createApplication(canvas, window) {
     const state = {
@@ -18,7 +19,9 @@ export default function createApplication(canvas, window) {
         cities: {},
         paths: {},
         currentDrawing: undefined,
-        isDrawing: false
+        isDrawing: false,
+
+        graph: Graph()
     }
 
     function drawCity(command) {
@@ -29,6 +32,7 @@ export default function createApplication(canvas, window) {
             return
         }
         state.cities[city.id] = city
+        //state.graph.addNode(city.id)
         console.log(`City Draw. Id: ${city.id}`)
     }
 

@@ -14,7 +14,7 @@ describe('Priority Queue', () => {
             }
         };
 
-        var queue = new PriorityQueue(comparator);
+        var queue = PriorityQueue(comparator);
 
         queue.add(4)
         queue.add(5)
