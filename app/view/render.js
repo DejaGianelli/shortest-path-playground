@@ -1,4 +1,4 @@
-export default function renderCanvas({ canvas, cities, paths, size }) {
+export default function renderCanvas(cities, paths, size, canvas) {
     const context = canvas.getContext("2d")
 
     canvas.width = size.width
@@ -26,6 +26,6 @@ export default function renderCanvas({ canvas, cities, paths, size }) {
     }
     
     requestAnimationFrame(() => {
-        renderCanvas({ canvas, cities, paths, size })
+        renderCanvas(cities, paths, size, canvas)
     })
 }

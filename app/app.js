@@ -1,37 +1,21 @@
 import City from "./models/City.js"
 import { Path } from "./models/Path.js"
 import Point from "./models/Point.js"
-import { createDrawPathModeListener, createDrawCityModeListener } from "./listeners/draw-mode-listener.js"
 import createPathDraw from "./path-draw.js"
 import { Graph } from "./models/Graph.js"
 
-export default function createApplication(canvas, window) {
-    const state = {
-        size: {
-            width: 0,
-            height: 0
-        },
-        canvas: canvas,
-        drawMode:  { 
-            type: "city",
-            listeners: []
-        },
-        cities: {},
-        paths: {},
-        currentDrawing: undefined,
-        isDrawing: false,
-        graph: Graph()
+export default function createApplication() {
+    
+    const size = {
+        width: 0,
+        height: 0
     }
-
-    function changeDrawMode(command) {
-        console.log("Cleaning current listeners...")
-        for (const {eventType, target, handler} of state.drawMode.listeners) {
-            target.removeEventListener(eventType, handler)
-        }
-        state.drawMode = command
-        console.log(`Mode changed to ${command.type}`)     
-    }
-
+    const cities = {}
+    const paths = {}
+    let currentDrawing = undefined
+    let isDrawing = false
+    const graph = Graph()
+    
     /**
      * Checks whether a point in the canvas collides with something
      * @param {Point} point
@@ -41,7 +25,7 @@ export default function createApplication(canvas, window) {
         //TODO: improve performance of this method, since it iterates over all cities and point in the border of the circle
         // this algorithm is O(n^2)
         let collision = undefined
-        for (const [, city] of Object.entries(state.cities)) {
+        for (const [, city] of Object.entries(cities)) {
             for (let y = 0, rad = 0.0174533; y < 360, rad < 6.28319; y++, rad += 0.0174533) {
                 const catX = city.radius() * Math.cos(rad)
                 const catY = city.radius() * Math.sin(rad)
@@ -68,13 +52,13 @@ export default function createApplication(canvas, window) {
             console.log("Can't draw because of a city collision")
             return
         }
-        state.cities[city.id] = city
-        state.graph.addNode(city.id)
+        cities[city.id] = city
+        graph.addNode(city.id)
         console.log(`City Draw. Id: ${city.id}`)
     }
 
     function cityCollide(city) {
-        for (const [, current] of Object.entries(state.cities)) {
+        for (const [, current] of Object.entries(cities)) {
             const deltaX = Math.abs(current.center.x - city.center.x)
             const deltaY = Math.abs(current.center.y - city.center.y)
             const distance = city.radius() + current.radius()
@@ -96,71 +80,63 @@ export default function createApplication(canvas, window) {
             console.log("A Path must connect two cities")
             return
         } 
-        state.isDrawing = true
+        isDrawing = true
         const path = Path()
         path.from = collision.city
-        state.paths[path.id] = path
+        paths[path.id] = path
         const drawing = createPathDraw(path.id, command.x, command.y)
-        state.currentDrawing = drawing
+        currentDrawing = drawing
         console.log(`Path Drawing started. Id: ${path.id}`)
     }
 
     function stopDrawingPath(command) {
-        if (!state.isDrawing) {
+        if (!isDrawing) {
             return
         }
         const collision = hasCollision(Point(command.mouseX, command.mouseY))
         if (!collision) {
-            const { id } = state.currentDrawing
-            delete state.paths[id]
+            const { id } = currentDrawing
+            delete paths[id]
             console.log("A Path must connect two cities")
         } else {
-            const { id } = state.currentDrawing
-            state.paths[id].to = collision.city
-            state.graph.addEdge(state.paths[id].from.id, state.paths[id].to.id, state.paths[id].distance())
+            const { id } = currentDrawing
+            paths[id].to = collision.city
+            graph.addEdge(paths[id].from.id, paths[id].to.id, paths[id].distance())
         }
-        state.isDrawing = false
-        state.currentDrawing = undefined
+        isDrawing = false
+        currentDrawing = undefined
         console.log("Drawing ended")
     }
 
     function drawPath(command) {
-        if (!state.isDrawing) {
+        if (!isDrawing) {
             return
         }
-        const { id, dequeue } = state.currentDrawing
-        state.currentDrawing.draw(command)
+        const { id, dequeue } = currentDrawing
+        currentDrawing.draw(command)
         const segment = dequeue()
         if (segment) {
-            state.paths[id].segments.push(segment)
+            paths[id].segments.push(segment)
             console.log("Segment Draw")
         }
     }
 
     function setCanvasSize() {
         const container = document.getElementById("convas-container")
-        state.size.width = container.clientWidth
-        state.size.height = container.clientHeight
+        size.width = container.clientWidth
+        size.height = container.clientHeight
     }
 
-    window.addEventListener("resize", function(e) {
-        setCanvasSize()
-    });
-    
-    const drawPathModeListener = createDrawPathModeListener(state, window)
-    drawPathModeListener.subscribe("drawingStarted", startDrawingPath)
-    drawPathModeListener.subscribe("drawingEnded", stopDrawingPath)
-    drawPathModeListener.subscribe("draw", drawPath)
-    drawPathModeListener.subscribe("change", changeDrawMode)
-
-    const drawCityModeListener = createDrawCityModeListener(state)
-    drawCityModeListener.subscribe("draw", drawCity)
-    drawCityModeListener.subscribe("change", changeDrawMode)
-
-    drawCityModeListener.set()
     setCanvasSize()
 
     return {
-        state
+        cities, 
+        paths, 
+        size,
+        setCanvasSize,
+        startDrawingPath,
+        stopDrawingPath,
+        drawPath,
+        drawCity,
     }
 }
