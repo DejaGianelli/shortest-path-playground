@@ -1,9 +1,9 @@
 import PriorityQueue from "./PriorityQueue.js"
 
 function comparator(obj, to) {
-    if (obj > to) {
+    if (obj.priority > to.priority) {
         return 1
-    } else if (obj === to) {
+    } else if (obj.priority === to.priority) {
         return 0
     } else {
         return -1
@@ -84,14 +84,14 @@ function Graph() {
         const stack = []
         stack.push(toNode)
         let previous = previousNodes.get(toNode.id)
-        if (previous) {
+        while (previous) {
             stack.push(previous)
             previous = previousNodes.get(previous.id)
         }
 
         const path = []
         while (stack.length > 0) {
-            path.push(stack.shift().id)
+            path.push(stack.pop().id)
         }
 
         return path

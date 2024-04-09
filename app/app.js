@@ -16,6 +16,10 @@ export default function createApplication() {
     let isDrawing = false
     const graph = Graph()
     
+    function getShortestPath(from, to) {
+        return graph.getShortestPath(from, to)
+    }
+
     /**
      * Checks whether a point in the canvas collides with something
      * @param {Point} point
@@ -102,10 +106,10 @@ export default function createApplication() {
             const { id } = currentDrawing
             paths[id].to = collision.city
             graph.addEdge(paths[id].from.id, paths[id].to.id, paths[id].distance())
+            console.log(`Path Drawing ended. Distance: ${paths[id].distance()}`)
         }
         isDrawing = false
         currentDrawing = undefined
-        console.log("Drawing ended")
     }
 
     function drawPath(command) {
@@ -138,5 +142,6 @@ export default function createApplication() {
         stopDrawingPath,
         drawPath,
         drawCity,
+        getShortestPath
     }
 }

@@ -51,6 +51,7 @@ export default function PriorityQueue(cmp) {
     return {
         remove,
         add,
-        isEmpty
+        isEmpty,
+        items
     }
 }
