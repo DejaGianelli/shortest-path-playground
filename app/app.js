@@ -65,8 +65,9 @@ export default function createApplication() {
         for (const [, current] of Object.entries(cities)) {
             const deltaX = Math.abs(current.center.x - city.center.x)
             const deltaY = Math.abs(current.center.y - city.center.y)
-            const distance = city.radius() + current.radius()
-            if (deltaX < distance && deltaY < distance) {
+            const minDistance = city.radius() + current.radius()
+            const hypotenuse = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
+            if (hypotenuse < minDistance) {
                 return true
             }
         }
