@@ -20,39 +20,10 @@ export default function createApplication() {
         return graph.getShortestPath(from, to)
     }
 
-    /**
-     * Checks whether a point in the canvas collides with something
-     * @param {Point} point
-     * @returns {bool} 
-     */
-    function hasCollision(point) {
-        //TODO: improve performance of this method, since it iterates over all cities and point in the border of the circle
-        // this algorithm is O(n^2)
-        let collision = undefined
-        for (const [, city] of Object.entries(cities)) {
-            for (let y = 0, rad = 0.0174533; y < 360, rad < 6.28319; y++, rad += 0.0174533) {
-                const catX = city.radius() * Math.cos(rad)
-                const catY = city.radius() * Math.sin(rad)
-                const offsetX = catX + city.center.x
-                const offsetY = catY + city.center.y
-                if (
-                    //Checks if the point is between the city
-                    point.x <= offsetX && point.x >= (offsetX - (catX * 2)) &&
-                    point.y <= offsetY && point.y >= (offsetY - (catY * 2))
-                ) {
-                    console.log(`Point x: ${point.x} y: ${point.y} collided with city ${city.id}`)
-                    collision = { city: city }
-                    break;
-                }
-            }
-        }
-        return collision
-    }
-
     function drawCity(command) {
         console.log("Drawing City in Canvas")
         const city = City(Point(command.x, command.y), command.size)
-        if (cityCollide(city)) {
+        if (collidesWithCity(city)) {
             console.log("Can't draw because of a city collision")
             return
         }
@@ -61,17 +32,41 @@ export default function createApplication() {
         console.log(`City Draw. Id: ${city.id}`)
     }
 
-    function cityCollide(city) {
+    function collidesWithCity(city) {
         for (const [, current] of Object.entries(cities)) {
-            const deltaX = Math.abs(current.center.x - city.center.x)
-            const deltaY = Math.abs(current.center.y - city.center.y)
+            const distance = getPointsDistance(current.center, city.center)
             const minDistance = city.radius() + current.radius()
-            const hypotenuse = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
-            if (hypotenuse < minDistance) {
+            if (distance < minDistance) {
                 return true
             }
         }
         return false
+    }
+
+    /**
+     * @param {Point} to 
+     * @param {Point} from 
+     */
+    function getPointsDistance(to, from) {
+        const deltaX = Math.abs(to.x - from.x)
+        const deltaY = Math.abs(to.y - from.y)
+        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
+    }
+
+    /**
+     * @param {Point} point 
+     */
+    function isInsideCity(point) {
+        let collision = undefined
+        for (const [, current] of Object.entries(cities)) {
+            const distance = getPointsDistance(point, current.center)
+            const maxDistance = current.radius()
+            if (distance <= maxDistance) {
+                collision = { city: current }
+                break
+            }
+        }
+        return collision
     }
 
     /**
@@ -80,7 +75,7 @@ export default function createApplication() {
      */
     function startDrawingPath(command) {
         const point = Point(command.x, command.y)
-        const collision = hasCollision(point)
+        const collision = isInsideCity(point)
         if (!collision) {
             console.log("A Path must connect two cities")
             return
@@ -98,7 +93,7 @@ export default function createApplication() {
         if (!isDrawing) {
             return
         }
-        const collision = hasCollision(Point(command.mouseX, command.mouseY))
+        const collision = isInsideCity(Point(command.mouseX, command.mouseY))
         if (!collision) {
             const { id } = currentDrawing
             delete paths[id]
